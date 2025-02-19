@@ -19,6 +19,7 @@ def get_links_from(url: str) -> list[str]:
         links.append(link['href'])
     return links
 
+
 def get_links_from_wiki(wiki_base_url: str = "https://galaxylife.wiki.gg", all_pages_loc: str = "/wiki/Special:AllPages") -> list[str]:
     '''
     Retrieves all the links to relevant content pages from the wiki.
@@ -43,6 +44,7 @@ def get_links_from_wiki(wiki_base_url: str = "https://galaxylife.wiki.gg", all_p
     print(f"Found {len(filtered_wiki_links)} wiki links.")
     return filtered_wiki_links
 
+
 def download_urls(urls: list[str], folder: str = "data/raw/") -> None:
     '''
     Downloads the HTML content of all pages from a given list of URLs.
@@ -53,17 +55,58 @@ def download_urls(urls: list[str], folder: str = "data/raw/") -> None:
     if not os.path.exists(folder):
         os.makedirs(folder)
     
+    print("Downloading HTML content...")
     for ii, url in enumerate(urls):
-        print(f"{url=}")
+        #print(f"{url=}")
         response: Response = requests.get(url)
         with open(folder + str(ii) + ".html", "w", encoding="utf-8") as file:
-            print(response.text)
             file.write(response.text)
-        print(f"finished {ii+1}/{len(urls)}")
-    print("Finished downloading HTML content")
+        #print(f"finished {ii+1}/{len(urls)}")
+        print("#", flush=True, end="")
+    print("\nFinished downloading HTML content")
     
+
+def preprocess_data(raw_data: str = "data/raw/", processed_data: str = "data/processed/") -> None:
+    '''
+    Preprocesses the raw HTML data into better human readable text files.
+    Note that this will not make them perfect.
+
+    :param raw_data: Folder containing the raw HTML data
+    :param processed_data: Folder to save the processed data to
+    '''
+    if not os.path.exists(raw_data):
+        print("No raw data found. Please download the data first and make sure to specify the correct path.")
+        return
+    
+    if not os.path.exists(processed_data):
+        os.makedirs(processed_data)
+
+    print("Preprocessing data...")
+    for file in os.listdir(raw_data):
+        ii: int = int(file.split(".")[0])
+        with open(raw_data + file, "r", encoding="utf-8") as f:
+            html_content: str = f.read()
+            soup: BeautifulSoup = BeautifulSoup(html_content, "html.parser")
+            content: str = soup.get_text() # type: ignore
+
+            # prettify by removing "header" and "footer"
+            line_content: list[str] = content.split("\n")
+            line_content = line_content[170:-38]
+            content = "\n".join(line_content)
+            
+            with open(processed_data + str(ii) + ".txt", "w", encoding="utf-8") as text_file:
+                text_file.write(content)
+        print("#", flush=True, end="")
+    print("\nFinished preprocessing data")
 
 
 if __name__ == "__main__":
-    links: list[str] = get_links_from_wiki()
-    download_urls(links)
+    if len(os.listdir("data/processed/")) > 0:
+        print(f"Found {len(os.listdir('data/processed'))} processed data files. Skipping preprocessing.")
+    else:
+        links: list[str] = get_links_from_wiki()
+        download_urls(links)
+        preprocess_data()
+
+    
+
