@@ -1,19 +1,10 @@
-# based on the tutorial at https://python.langchain.com/v0.1/docs/get_started/quickstart/ and modified
+# based on and modified from the wiki over at https://python.langchain.com/v0.1/docs/get_started/quickstart/ 
+from typing import List
 from langchain_ollama import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import StrOutputParser
 
 MODEL_NAME: str = "llama3.2:1b"
-
-# create simple chain
-prompt: ChatPromptTemplate = ChatPromptTemplate.from_messages([
-    ("system", "You are an expert on the documentation of the game Galaxy Life. Be friendly and answer any questions of the user according to your context. You can also tell jokes."),
-    ("user", "{input}")
-])
 llm: OllamaLLM = OllamaLLM(model=MODEL_NAME)
-output_parser = StrOutputParser()
-
-chain = prompt | llm | output_parser
 
 # get raw docs
 from langchain_community.document_loaders import WebBaseLoader
@@ -27,17 +18,33 @@ embeddings: OllamaEmbeddings = OllamaEmbeddings(model=MODEL_NAME)
 # parse raw docs to vector store
 from langchain_community.vectorstores import FAISS
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_core.documents import Document
 text_splitter = RecursiveCharacterTextSplitter()
-documents = text_splitter.split_documents(docs)
+documents: List[Document] = text_splitter.split_documents(docs)
 #print(f"{docs=}")
 #print("#####################")
 #print(f"{documents=}")  
-vector = FAISS.from_documents(documents, embeddings)
+vector: FAISS = FAISS.from_documents(documents, embeddings)
+
+# create document chain
+from langchain.chains.combine_documents import create_stuff_documents_chain # type: ignore
+prompt = ChatPromptTemplate.from_template(
+"""Answer the following question based only on the provided context:
+<context>
+{context}
+</context>
+Question: {input}""")
+document_chain = create_stuff_documents_chain(llm, prompt)
+
+# create retrieval chain
+from langchain.chains import create_retrieval_chain
+from langchain_core.vectorstores import VectorStoreRetriever
+retriever: VectorStoreRetriever = vector.as_retriever()
+retrieval_chain = create_retrieval_chain(retriever, document_chain)
+
+# get output
+response = retrieval_chain.invoke({"input": "how can langsmith help with testing?"})
+print(response["answer"])
 
 
-
-# output
-print(
-chain.invoke({"input": "Name 3 units and explain their abilities."})
-)
 
