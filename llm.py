@@ -1,5 +1,8 @@
 # based on and modified from the wiki over at https://python.langchain.com/v0.1/docs/get_started/quickstart/ 
 
+import time
+start_time = time.time()
+
 from langchain_ollama import OllamaLLM
 MODEL_NAME: str = "llama3.2:1b"
 llm: OllamaLLM = OllamaLLM(model=MODEL_NAME)
@@ -8,10 +11,12 @@ llm: OllamaLLM = OllamaLLM(model=MODEL_NAME)
 from langchain_community.document_loaders import WebBaseLoader
 loader = WebBaseLoader("https://docs.smith.langchain.com/user_guide")
 docs = loader.load()
+print(f"[{time.time() - start_time}]\tfound {len(docs)} documents")
 
 # load embedding model
 from langchain_ollama import OllamaEmbeddings
 embeddings: OllamaEmbeddings = OllamaEmbeddings(model=MODEL_NAME)
+print(f"[{time.time() - start_time}]\tloaded embeddings model")
 
 # parse raw docs to vector store
 from typing import List
@@ -24,6 +29,7 @@ documents: List[Document] = text_splitter.split_documents(docs)
 #print("#####################")
 #print(f"{documents=}")  
 vector: FAISS = FAISS.from_documents(documents, embeddings)
+print(f"[{time.time() - start_time}]\tcreated vector store")
 
 # history aware retriever
 from langchain.chains import create_history_aware_retriever
@@ -37,6 +43,7 @@ prompt = ChatPromptTemplate.from_messages([
 ])
 retriever: VectorStoreRetriever = vector.as_retriever()
 retriever_chain = create_history_aware_retriever(llm, retriever, prompt)
+print(f"[{time.time() - start_time}]\tcreated history aware retriever")
 
 # create history aware document chain
 from langchain.chains.combine_documents import create_stuff_documents_chain # type: ignore
@@ -46,10 +53,12 @@ prompt = ChatPromptTemplate.from_messages([
     ("user", "{input}"),
 ])
 document_chain = create_stuff_documents_chain(llm, prompt)
+print(f"[{time.time() - start_time}]\tcreated history aware document chain")
 
 # history aware retrieval chain
 from langchain.chains import create_retrieval_chain
 retrieval_chain = create_retrieval_chain(retriever_chain, document_chain)
+print(f"[{time.time() - start_time}]\tcreated history aware retrieval chain")
 
 # create history
 from langchain_core.messages import HumanMessage, AIMessage
@@ -60,7 +69,7 @@ response = retrieval_chain.invoke({
     "chat_history": chat_history,
     "input": "Tell me how"
 })
-print(response["answer"])
+print(f"[{time.time() - start_time}]\t{response["answer"]}")
 
 
 
