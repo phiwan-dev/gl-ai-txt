@@ -17,9 +17,12 @@
                     langchain-community
                     langchain-ollama
                     langchain-text-splitters
+                    langchain-chroma
+                    langgraph
                     faiss
                     numpy
                     beautifulsoup4
+                    tqdm
                 ])
             ];
         };
