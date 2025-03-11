@@ -2,6 +2,18 @@ import requests
 from requests import Response
 from bs4 import BeautifulSoup
 import os
+import argparse
+from argparse import Namespace
+
+
+def parse_args() -> Namespace:
+    '''
+    Parses the command line arguments.
+    '''
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-d", "--download", help="download the wiki pages", action="store_true")
+    parser.add_argument("-p", "--preprocess", help="run the preprocessing step", action="store_true")
+    return parser.parse_args()
 
 
 def get_links_from(url: str) -> list[str]:
@@ -101,12 +113,26 @@ def preprocess_data(raw_data: str = "data/raw/", processed_data: str = "data/pro
 
 
 if __name__ == "__main__":
-    if len(os.listdir("data/processed/")) > 0:
-        print(f"Found {len(os.listdir('data/processed'))} processed data files. Skipping preprocessing.")
-    else:
+    args: Namespace = parse_args()
+
+    if args.download:
         links: list[str] = get_links_from_wiki()
         download_urls(links)
-        preprocess_data()
+    else:
+        if os.path.exists("data/raw/") and len(os.listdir("data/raw/")) > 0:
+            print(f"Found {len(os.listdir('data/raw'))} raw data files. Skipping download of wiki data.")
+        else:
+            print("No wiki data found! Consider setting the '--download' flag!")
 
+    if args.preprocess:
+        preprocess_data()
+    else:
+        if os.path.exists("data/processed/") and len(os.listdir("data/processed/")) > 0:
+            print(f"Found {len(os.listdir('data/processed'))} processed data files. Skipping preprocessing of raw data.")
+        else:
+            print("No processed data found! Consider setting the '--preprocess' flag!")
+
+
+    
     
 
