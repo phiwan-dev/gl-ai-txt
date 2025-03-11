@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 import os
 import argparse
 from argparse import Namespace
+from langchain_ollama import ChatOllama
+from langchain_core.prompts import PromptTemplate
 
 
 def parse_args() -> Namespace:
@@ -78,7 +80,7 @@ def download_urls(urls: list[str], folder: str = "data/raw/") -> None:
     print("\nFinished downloading HTML content")
     
 
-def preprocess_data(raw_data: str = "data/raw/", processed_data: str = "data/processed/") -> None:
+def preprocess_data(raw_data: str = "data/raw/", processed_data: str = "data/processed/", model_name: str="qwen2.5:7b") -> None:
     '''
     Preprocesses the raw HTML data into better human readable text files.
     Note that this will not make them perfect.
@@ -93,6 +95,15 @@ def preprocess_data(raw_data: str = "data/raw/", processed_data: str = "data/pro
     if not os.path.exists(processed_data):
         os.makedirs(processed_data)
 
+    llm = ChatOllama(model=model_name)
+    raw_summarization_prompt = """CONTEXT: {context}
+
+    TASK: Above is provided a raw text output from a website. Your job is to summarize the information in it about the game galaxy life.
+    Stay true to the provided context. Don't leave out any important information. The summary should be detailed and structured in paragraphs.
+    Do not talk about the Header/Footer information. Do not talk about anything else."""
+    summarization_prompt = PromptTemplate.from_template(raw_summarization_prompt)
+
+
     print("Preprocessing data...")
     for file in os.listdir(raw_data):
         ii: int = int(file.split(".")[0])
@@ -101,13 +112,11 @@ def preprocess_data(raw_data: str = "data/raw/", processed_data: str = "data/pro
             soup: BeautifulSoup = BeautifulSoup(html_content, "html.parser")
             content: str = soup.get_text() # type: ignore
 
-            # prettify by removing "header" and "footer"
-            line_content: list[str] = content.split("\n")
-            line_content = line_content[170:-38]
-            content = "\n".join(line_content)
+            message = summarization_prompt.invoke({"context": content})
+            response = llm.invoke(message)
             
             with open(processed_data + str(ii) + ".txt", "w", encoding="utf-8") as text_file:
-                text_file.write(content)
+                text_file.write(str(response.content))
         print("#", flush=True, end="")
     print("\nFinished preprocessing data")
 
