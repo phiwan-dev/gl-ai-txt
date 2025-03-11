@@ -44,12 +44,15 @@ from typing_extensions import List, TypedDict
 
 # Define prompt for question-answering
 from langchain_core.prompts import PromptTemplate
-raw_response_prompt = """Answer the question at the end using the given context below.
-Do not make up an answer.
+raw_response_prompt = """{chat_history}
 
 {context}
 
-Question: {question}"""
+IMPORTANT QUESTION: {question}
+
+You are a chat bot to answer user questions about the game galaxy life.
+Answer the user question at the above using the given context and the chat message history.
+Do not make up an answer."""
 response_prompt = PromptTemplate.from_template(raw_response_prompt)
 
 
@@ -60,6 +63,7 @@ class State(TypedDict):
     query: str
     context: List[Document]
     answer: str
+    chat_history: List[str]
 
 
 raw_query_prompt = """You are a chat bot to answer user questions about the game galaxy life.
@@ -69,9 +73,13 @@ Question: {question}"""
 query_prompt = PromptTemplate.from_template(raw_query_prompt)
 
 def generate_query(state: State):
+    try:
+        chat_history = state["chat_history"] + ["HumanMessage: " + state["question"]]
+    except KeyError:
+        chat_history = ["HumanMessage: " + state["question"]]
     messages = query_prompt.invoke({"question": state["question"]})
     response = llm.invoke(messages)
-    return {"query": response.content}
+    return {"query": response.content, "chat_history": chat_history}
 
 
 def retrieve(state: State):
@@ -81,18 +89,26 @@ def retrieve(state: State):
 
 def generate_response(state: State):
     docs_content = "\n\n".join(doc.page_content for doc in state["context"])
-    messages = response_prompt.invoke({"question": state["question"], "context": docs_content})
+    messages = response_prompt.invoke({
+        "chat_history": "\n".join(state["chat_history"]), 
+        "context": docs_content, 
+        "question": state["question"]
+    })
     response = llm.invoke(messages)
-    return {"answer": response.content}
+    new_chat_history = state["chat_history"] + [f"AIMessage: {response.content}"]
+    return {"answer": response.content, "chat_history": new_chat_history}
 
 
-# Compile graph
+# Compile graph using memory checkpointer for message history persistance across prompts
+from langgraph.checkpoint.memory import MemorySaver
+memory = MemorySaver()
 source_graph = StateGraph(State).add_sequence([generate_query, retrieve, generate_response])
 source_graph.add_edge(START, "generate_query")
-graph = source_graph.compile()
+graph = source_graph.compile(checkpointer=memory)
 
 
 # print output
+config = {"configurable": {"thread_id": "1"}}
 question = "What buildings can i build"
 for message, metadata in graph.stream({"question": question}, stream_mode="messages"):
     if metadata["langgraph_node"] == "generate_response":
