@@ -105,6 +105,13 @@ def generate_response(state: State):
         "context": docs_content, 
         "question": state["question"]
     })
+    print("QUERY:")
+    print(state["query"])
+    print("history:")
+    print(state["chat_history"])
+    print("CONTEXT:")
+    print(docs_content)
+    print("ANSWER:")
     response = llm.invoke(messages)
     new_chat_history = state["chat_history"] + [f"AIMessage: {response.content}"]
     return {"answer": response.content, "chat_history": new_chat_history}
@@ -120,8 +127,11 @@ graph = source_graph.compile(checkpointer=memory)
 
 # print output
 config = {"configurable": {"thread_id": "1"}}
-question = "What buildings can i build"
-for message, metadata in graph.stream({"question": question}, stream_mode="messages"):
-    if metadata["langgraph_node"] == "generate_response":
-        print(f"{message.content}", end="", flush=True)
-print("")
+question = "The NPCs are categorized under different sections such as protagonists, antagonists, and others. Give me a list of NPC"
+while True:
+    for message, metadata in graph.stream({"question": question}, config=config, stream_mode="messages"):
+        if metadata["langgraph_node"] == "generate_response":
+            print(f"{message.content}", end="", flush=True)
+    question = input("\n> ")
+    if question == "exit":
+        break
