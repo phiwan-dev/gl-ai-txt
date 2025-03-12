@@ -1,6 +1,7 @@
 
 
 MODEL_NAME = "qwen2.5:7b"
+#MODEL_NAME = "phi4"
 
 
 # init chat model
@@ -24,14 +25,23 @@ from langchain_chroma import Chroma
 embeddings: OllamaEmbeddings = OllamaEmbeddings(model=MODEL_NAME)
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=4000,chunk_overlap=500,length_function=len)
 documents: List[Document] = text_splitter.split_documents(raw_documents)
-#vector_store = Chroma(embedding_function=embeddings, persist_directory="./cache")
-vector_store = Chroma(embedding_function=embeddings)
+#vector_store = Chroma(embedding_function=embeddings, persist_directory="./cache", )
+#vector_store = Chroma(embedding_function=embeddings)
+#vector_store = Chroma.from_documents(documents, embeddings, persist_directory="./cache")
+
+from langchain_community.vectorstores import FAISS
+vector_store = FAISS.from_documents(documents[:1], embeddings)
+# Save and reload the vector store
+#vectorstore.save_local("faiss_index_")
+#persisted_vectorstore = FAISS.load_local("faiss_index_", embeddings, allow_dangerous_deserialization=True)
+
+
 #print("  [raw docs]")
 #for doc in raw_documents:
 #    print(doc.page_content)
 print(f"  [processed docs] ({len(documents)})")
 for doc in documents:
-    _ = vector_store.add_documents(documents)
+    _ = vector_store.add_documents([doc])
     print("#", end="", flush=True)
 print("")
 
@@ -83,12 +93,13 @@ def generate_query(state: State):
 
 
 def retrieve(state: State):
-    retrieved_docs = vector_store.similarity_search(state["query"])
+    #retrieved_docs = vector_store.search(state["query"], search_type="mmr")
+    retrieved_docs = vector_store.similarity_search(state["query"], k=4)
     return {"context": retrieved_docs}
 
 
 def generate_response(state: State):
-    docs_content = "\n\n".join(doc.page_content for doc in state["context"])
+    docs_content = "\n------\n".join(doc.page_content for doc in state["context"])
     messages = response_prompt.invoke({
         "chat_history": "\n".join(state["chat_history"]), 
         "context": docs_content, 
