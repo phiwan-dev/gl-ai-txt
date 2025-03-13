@@ -30,20 +30,19 @@ documents: List[Document] = text_splitter.split_documents(raw_documents)
 #vector_store = Chroma.from_documents(documents, embeddings, persist_directory="./cache")
 
 from langchain_community.vectorstores import FAISS
-vector_store = FAISS.from_documents(documents[:1], embeddings)
-# Save and reload the vector store
-#vectorstore.save_local("faiss_index_")
-#persisted_vectorstore = FAISS.load_local("faiss_index_", embeddings, allow_dangerous_deserialization=True)
-
-
-#print("  [raw docs]")
-#for doc in raw_documents:
-#    print(doc.page_content)
-print(f"  [processed docs] ({len(documents)})")
-for doc in documents:
-    _ = vector_store.add_documents([doc])
-    print("#", end="", flush=True)
-print("")
+# build vs load vectorstore. True=build, False=load
+if True:
+    vector_store = FAISS.from_documents(documents[:1], embeddings)
+    print(f"  [processed docs] ({len(documents)})")
+    for doc in documents:
+        _ = vector_store.add_documents([doc])
+        print("#", end="", flush=True)
+    print("")
+    vector_store.save_local("cache/faiss")
+else:
+    # load vector store
+    vector_store = FAISS.load_local("cache/faiss", embeddings, allow_dangerous_deserialization=True)
+print("vector store is ready")
 
 
 from langchain_core.documents import Document
