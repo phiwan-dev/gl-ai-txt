@@ -75,20 +75,35 @@ class State(TypedDict):
     chat_history: List[str]
 
 
-raw_query_prompt = """You are a chat bot to answer user questions about the game galaxy life.
-Generate a short RAG query for the given question.
-Do not ask for further information.
-Question: {question}"""
-query_prompt = PromptTemplate.from_template(raw_query_prompt)
+raw_rephrase_prompt: str = """Last Response: {last_response}
+
+Question: {question}
+
+You are a chat bot to answer user questions about the game galaxy life.
+Rephrase the users question to make it independent of the last response.
+Substitue any relative references to it with the actual content.
+Only respond with a rephrased question."""
+rephrase_prompt: PromptTemplate = PromptTemplate.from_template(raw_rephrase_prompt)
+
+
+def analyze_question(state: State):
+    try:
+        last_response: str = state["last_response"]
+        print("last_response exists")
+    except KeyError:
+        last_response = "This is the start of the conversation. Please ask your question."
+        print("last_response does NOT exist")
+    prompt = rephrase_prompt.invoke({"question": state["question"], "last_response": last_response})
+    response = llm.invoke(prompt)
+    return {"rephrased_question": response.content, "last_response": last_response}
+
 
 def generate_query(state: State):
-    try:
-        chat_history = state["chat_history"] + ["HumanMessage: " + state["question"]]
-    except KeyError:
-        chat_history = ["HumanMessage: " + state["question"]]
-    messages = query_prompt.invoke({"question": state["question"]})
-    response = llm.invoke(messages)
-    return {"query": response.content, "chat_history": chat_history}
+    prompt = query_prompt.invoke({"question": state["rephrased_question"], "last_response": state["last_response"]})
+    print("REPHRASED_QUESTION:")
+    print(state["rephrased_question"])
+    response = llm.invoke(prompt)
+    return {"query": response.content}
 
 
 def retrieve(state: State):
@@ -119,14 +134,14 @@ def generate_response(state: State):
 # Compile graph using memory checkpointer for message history persistance across prompts
 from langgraph.checkpoint.memory import MemorySaver
 memory = MemorySaver()
-source_graph = StateGraph(State).add_sequence([generate_query, retrieve, generate_response])
-source_graph.add_edge(START, "generate_query")
+source_graph = StateGraph(State).add_sequence([analyze_question, generate_query, retrieve, generate_response])
+source_graph.add_edge(START, "analyze_question")
 graph = source_graph.compile(checkpointer=memory)
 
 
 # print output
 config = {"configurable": {"thread_id": "1"}}
-question = "The NPCs are categorized under different sections such as protagonists, antagonists, and others. Give me a list of NPC"
+question = "What NPC are there"
 while True:
     for message, metadata in graph.stream({"question": question}, config=config, stream_mode="messages"):
         if metadata["langgraph_node"] == "generate_response":
