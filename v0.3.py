@@ -98,6 +98,9 @@ rephrase_prompt: PromptTemplate = PromptTemplate.from_template(raw_rephrase_prom
 
 
 def analyze_question(state: State):
+    print("\t[ANALYZE QUESTION]")
+    assert "question" in state, "No question was provided."
+
     try:
         last_response: str = state["last_response"]
         print("last_response exists")
@@ -110,6 +113,10 @@ def analyze_question(state: State):
 
 
 def generate_query(state: State):
+    print("\t[GENERATE QUERY]")
+    assert "rephrased_question" in state, "No rephrased question found. Call analyze_question before!"
+    assert "last_response" in state,      "No rephrased question found. Call analyze_question before!"
+
     prompt = query_prompt.invoke({"question": state["rephrased_question"], "last_response": state["last_response"]})
     print("REPHRASED_QUESTION:")
     print(state["rephrased_question"])
@@ -118,24 +125,30 @@ def generate_query(state: State):
 
 
 def retrieve(state: State):
+    print("\t[RETRIEVE]")
+    assert "query" in state, "No query was provided. Call generate_query before!"
+    print("QUERY:")
+    print(state["query"])
+
     #retrieved_docs = vector_store.search(state["query"], search_type="mmr")
     retrieved_docs = vector_store.similarity_search(state["query"], k=4)
     return {"context": retrieved_docs}
 
 
 def generate_response(state: State):
+    print("\t[GENERATE RESPONSE]")
+    assert "context" in state,              "No context provided. Likely unwanted! Call retrieve before!"
+    assert "rephrased_question" in state,   "No rephrased question found! Call analyze_question before!"
+    assert "last_response" in state,        "No last response found! Call analyze_question before!"
+
     docs_content = "\n------\n".join(doc.page_content for doc in state["context"])
     prompt = response_prompt.invoke({
         "last_response": state["last_response"],
         "context": docs_content,
         "question": state["rephrased_question"]
     })
-    print("QUERY:")
-    print(state["query"])
-    print("history:")
-    print(state["chat_history"])
-    print("CONTEXT:")
-    print(docs_content)
+    #print("CONTEXT:")
+    #print(docs_content)
     print("ANSWER:")
     response = llm.invoke(prompt)
     return {"answer": response.content, "last_response": response.content}
