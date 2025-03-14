@@ -53,26 +53,37 @@ from typing_extensions import List, TypedDict
 
 # Define prompt for question-answering
 from langchain_core.prompts import PromptTemplate
-raw_response_prompt = """{chat_history}
+raw_response_prompt: str = """last_response: {last_response}
 
-{context}
+context: {context}
 
 IMPORTANT QUESTION: {question}
 
 You are a chat bot to answer user questions about the game galaxy life.
-Answer the user question at the above using the given context and the chat message history.
+Only answer the user question above using the given context.
 Do not make up an answer."""
-response_prompt = PromptTemplate.from_template(raw_response_prompt)
+response_prompt: PromptTemplate = PromptTemplate.from_template(raw_response_prompt)
 
 
 
 # Define state for application
 class State(TypedDict):
     question: str
+    rephrased_question: str
     query: str
     context: List[Document]
     answer: str
-    chat_history: List[str]
+    last_response: str
+
+
+raw_query_prompt: str = """last response: {last_response}
+
+Question: {question}
+
+You are a chat bot to answer user questions about the game galaxy life.
+Generate a RAG query for the given question, possibly considering the last response for it.
+Do not ask for further information."""
+query_prompt: PromptTemplate = PromptTemplate.from_template(raw_query_prompt)
 
 
 raw_rephrase_prompt: str = """Last Response: {last_response}
@@ -114,10 +125,10 @@ def retrieve(state: State):
 
 def generate_response(state: State):
     docs_content = "\n------\n".join(doc.page_content for doc in state["context"])
-    messages = response_prompt.invoke({
-        "chat_history": "\n".join(state["chat_history"]), 
-        "context": docs_content, 
-        "question": state["question"]
+    prompt = response_prompt.invoke({
+        "last_response": state["last_response"],
+        "context": docs_content,
+        "question": state["rephrased_question"]
     })
     print("QUERY:")
     print(state["query"])
@@ -126,9 +137,8 @@ def generate_response(state: State):
     print("CONTEXT:")
     print(docs_content)
     print("ANSWER:")
-    response = llm.invoke(messages)
-    new_chat_history = state["chat_history"] + [f"AIMessage: {response.content}"]
-    return {"answer": response.content, "chat_history": new_chat_history}
+    response = llm.invoke(prompt)
+    return {"answer": response.content, "last_response": response.content}
 
 
 # Compile graph using memory checkpointer for message history persistance across prompts
