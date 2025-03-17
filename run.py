@@ -16,7 +16,6 @@ class GlBot():
     class State(TypedDict):
         question: str
         rephrased_question: str
-        query: str
         context: List[Document]
         answer: str
         last_response: str
@@ -41,15 +40,6 @@ class GlBot():
         Only respond with a rephrased question."""
         self.rephrase_prompt: PromptTemplate = PromptTemplate.from_template(raw_rephrase_prompt)
 
-        raw_query_prompt: str = """last response: {last_response}
-
-        Question: {question}
-
-        You are a chat bot to answer user questions about the game galaxy life.
-        Generate a RAG query for the given question, possibly considering the last response for it.
-        Do not ask for further information."""
-        self.query_prompt: PromptTemplate = PromptTemplate.from_template(raw_query_prompt)
-        
         raw_response_prompt: str = """last_response: {last_response}
 
         context: {context}
@@ -104,26 +94,14 @@ class GlBot():
         return {"rephrased_question": response.content, "last_response": last_response}
 
 
-    def generate_query(self, state: State):
-        print("\t[GENERATE QUERY]")
-        assert "rephrased_question" in state, "No rephrased question found. Call analyze_question before!"
-        assert "last_response" in state,      "No rephrased question found. Call analyze_question before!"
-
-        prompt = self.query_prompt.invoke({"question": state["rephrased_question"], "last_response": state["last_response"]})
-        print("REPHRASED_QUESTION:")
-        print(state["rephrased_question"])
-        response = self.llm.invoke(prompt)
-        return {"query": response.content}
-
-
     def retrieve(self, state: State):
         print("\t[RETRIEVE]")
-        assert "query" in state, "No query was provided. Call generate_query before!"
+        assert "rephrased_question" in state, "No query was provided. Call generate_query before!"
         print("QUERY:")
-        print(state["query"])
+        print(state["rephrased_question"])
 
         #retrieved_docs = vector_store.search(state["query"], search_type="mmr")
-        retrieved_docs = self.vector_store.similarity_search(state["query"], k=4)
+        retrieved_docs = self.vector_store.similarity_search(state["rephrased_question"], k=4)
         return {"context": retrieved_docs}
 
 
@@ -149,7 +127,7 @@ class GlBot():
     def run(self):
         # Compile graph using memory checkpointer for message history persistance across prompts
         memory = MemorySaver()
-        source_graph = StateGraph(self.State).add_sequence([self.analyze_question, self.generate_query, self.retrieve, self.generate_response])
+        source_graph = StateGraph(self.State).add_sequence([self.analyze_question, self.retrieve, self.generate_response])
         source_graph.add_edge(START, "analyze_question")
         graph = source_graph.compile(checkpointer=memory)
 
