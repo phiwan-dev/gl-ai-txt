@@ -1,4 +1,5 @@
-from typing import Any, List
+import os
+from typing import Any, Generator, Iterator, List, Union
 from typing_extensions import List, TypedDict
 from langchain_core.documents import Document
 from langchain_core.prompts import PromptTemplate
@@ -9,6 +10,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_ollama import ChatOllama, OllamaEmbeddings
 from langgraph.graph import START, StateGraph
 from langgraph.checkpoint.memory import MemorySaver
+from langgraph.graph.state import CompiledStateGraph
 
 
 class GlBot():
@@ -48,12 +50,13 @@ class GlBot():
         Do not make up an answer."""
         self.response_prompt: PromptTemplate = PromptTemplate.from_template(raw_response_prompt)
 
-        self.run()
+        self.graph: CompiledStateGraph = self.compile()
+        self.config: RunnableConfig = {"configurable": {"thread_id": "1"}}
 
 
     def embed_documents(self) -> FAISS:
         # get raw docs
-        doc_loader = DirectoryLoader("testdata", glob="**/*.txt", show_progress=True, use_multithreading=False, loader_cls=TextLoader)  
+        doc_loader = DirectoryLoader(os.path.expanduser("~/work/gl-ai-txt/testdata"), glob="**/*.txt", show_progress=True, use_multithreading=False, loader_cls=TextLoader)  
         raw_documents = doc_loader.load()
 
         # create embeddings
@@ -88,7 +91,7 @@ class GlBot():
         return {"question": response.content, "answer": last_response}
 
 
-    def retrieve(self, state: State):
+    def retrieve(self, state: State) -> dict[str, List[Document]]:
         print("\t[RETRIEVE DOCUMENTS]")
         assert "question" in state, "No query/rephrased question was provided. Call analyze_question before!"
         print("QUERY:")
@@ -116,18 +119,19 @@ class GlBot():
         return {"answer": response.content}
 
 
-    def run(self):
+    def compile(self) -> CompiledStateGraph:
         # Compile graph using memory checkpointer for message history persistance across prompts
         memory = MemorySaver()
         source_graph = StateGraph(self.State).add_sequence([self.analyze_question, self.retrieve, self.generate_response])
         source_graph.add_edge(START, "analyze_question")
-        graph = source_graph.compile(checkpointer=memory)
+        return source_graph.compile(checkpointer=memory)
 
-        # main loop which prints output
-        config: RunnableConfig = {"configurable": {"thread_id": "1"}}
-        question = "What NPC are there"
+
+    def cli_loop(self) -> None:
+        # main loop which prints output for terminal use
+        question = "What NPC are there"     # default question at the start
         while True:
-            for message, metadata in graph.stream({"question": question}, config=config, stream_mode="messages"):
+            for message, metadata in self.graph.stream({"question": question}, config=self.config, stream_mode="messages"):
                 if metadata["langgraph_node"] == "generate_response":   # only print output from the final node
                     print(f"{message.content}", end="", flush=True)
             question = input("\n> ")
@@ -136,4 +140,5 @@ class GlBot():
 
 
 if __name__ == "__main__":
-    GlBot()
+    bot = GlBot()
+    bot.cli_loop()
