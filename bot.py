@@ -1,3 +1,13 @@
+"""
+title: Galaxy Life Wiki Bot
+author: phiwan-dev
+date: 2025-03-23
+version: 0.1
+license: MIT
+description: Galaxy Life chatbot which uses information from the wiki to answer as a RAG LLM
+requirements: langchain_core, langchain-community, langchain-ollama, langchain-text-splitters, langgraph
+"""
+
 import os
 from typing import Any, Generator, Iterator, List, Union
 from typing_extensions import List, TypedDict
