@@ -23,6 +23,22 @@ from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph.state import CompiledStateGraph
 
 
+class Pipeline:
+
+    def __init__(self) -> None:
+        self.name = "Galaxy Life Wiki Bot"
+        self.bot = GlBot()
+
+    async def on_startup(self) -> None:
+        # This function is called when the server is started.
+        print(f"on_startup:{__name__}")
+        pass
+
+    def pipe(self, user_message: str, model_id: str, messages: List[dict], body: dict) -> Union[str, Generator, Iterator]:
+        # invoke once with question for open-webui pipeline support
+        return self.bot.graph.invoke({"question": user_message}, config=self.bot.config)["answer"]
+
+
 class GlBot():
 
     # Define state for application
