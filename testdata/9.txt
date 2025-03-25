@@ -1,0 +1,15 @@
+The category "Event Units" on the Galaxy Life Wiki contains a list of 11 event-related units within the game. These units are typically temporary or limited-time characters, monsters, or entities that appear during specific in-game events. The provided list includes various types such as:
+
+- **Demon E:** A demon-themed unit.
+- **Earth Golem:** Likely an elemental-based golem.
+- **Emissary Of Evil:** An evil entity possibly representing a leader or a key character.
+- **Fire Golem:** Another elemental-based golem, this time associated with fire.
+- **Forest Golem:** Similar to the other golems but themed around forests.
+- **Jason S:** A specific name that could refer to a character or event.
+- **Shriek:** Possibly an audio effect or a unit related to screams or shrieks.
+- **Skeleton:** An undead-themed unit.
+- **Thunder Golem:** Another elemental-based golem associated with thunder.
+- **Wind Golem:** Yet another elemental-based golem, this one themed around wind.
+- **Zombie:** An undead-themed unit similar to the Skeleton.
+
+These units are likely used in various events or challenges within the game, providing players with unique and sometimes difficult-to-defend against enemies. The wiki page currently lacks detailed information about these event units, but it serves as a reference for players looking to prepare for upcoming events or understand what new units might be introduced during specific periods.

@@ -1,0 +1,16 @@
+The game *Galaxy Life* features a category titled "Vehicles," which is part of its troops section. This category includes various ground vehicles such as the Beetle Tank, Raider, The Mole, Colossus, and the new S-Trike model. These vehicles are produced in factories within the game and exhibit similar AI behavior to their corresponding infantry units.
+
+The Vehicles category also contains subcategories that further organize related content. Notably, there is a subcategory called "Troops" which includes four more categories (indicated but not explicitly named). The main pages listed under the "Vehicles" category are:
+
+1. **Beetle Tank** - A ground vehicle.
+2. **Colossus** - Another ground vehicle.
+3. **Raider** - Likely a ground vehicle.
+4. **The Mole** - Possibly a ground vehicle.
+5. **S-Trike** - A newer addition to the vehicles list.
+
+Additional content in this category includes:
+
+- **Factory** - This likely refers to the facilities where these vehicles are manufactured.
+- **Warp Gate** - An item or feature related to vehicle movement, possibly enabling instant transportation between locations.
+
+The provided text suggests that the game mechanics involve managing and utilizing these ground vehicles as part of the military strategy. The vehicles share characteristics with their infantry counterparts, implying a consistent gameplay approach across different units within the game.

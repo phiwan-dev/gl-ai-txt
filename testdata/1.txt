@@ -1,0 +1,7 @@
+The Galaxy Life Wiki provides an overview of the universe within the game, known as "Galaxy Life." This universe is divided into various planetary systems, accessible through a galaxy view that spans coordinates from (0,0) to (250,250). By clicking on a star or planetary system, players can explore individual planets. Some of these planets may be under the control of other players, allowing for interactions such as spying, helping, or attacking.
+
+The galaxy view also includes performance improvements, enhancing its functionality and user experience. When a player clicks on a specific star, additional details about the player's status become available, including whether they are online (indicated by a green LED) or offline (indicated by a red LED), as well as their level in the game.
+
+The wiki categorizes information under various headings such as "Colonies," "Obstacles," and "Systems." Additionally, there is mention of a "Tree of Life" feature, though its specifics are not detailed. The category also includes a subpage titled "Galaxies," which lists four relevant pages: "Colonies," "Obstacles," "Systems," and "Tree of Life."
+
+The information was last edited on August 1, 2022, at 13:55. It is noted that content from before November 2023 has been adapted from the Galaxy Life Fandom wiki, and page content is under a Creative Commons Attribution-ShareAlike 4.0 License unless otherwise specified.

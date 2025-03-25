@@ -1,0 +1,15 @@
+The game "Galaxy Life" features a variety of infantry units available for players to utilize. These units include Marines, Looters, Flame Throwers, Bazookas, Kamikaze, Starlinators, and the recently introduced Green Beret. Each unit has its unique characteristics and strengths:
+
+- **Marines**: Likely the standard infantry unit with general combat capabilities.
+- **Looters**: Probably specialized for resource gathering or scavenging.
+- **Flame Throwers**: Units equipped with flame throwers, useful in close-quarters combat.
+- **Bazookas**: Most likely carrying anti-tank weaponry, essential against armored targets.
+- **Kamikaze**: Units that may specialize in self-sacrificial attacks to clear out fortified defenses.
+- **Starlinators**: Possibly elite or special forces units with advanced abilities.
+- **Green Beret**: A new addition to the infantry roster.
+
+The category notes a weakness for these infantry units when facing "area blast defenses," indicating specific defensive strategies that can effectively counter them. 
+
+In terms of organizational structure within the game, there are subcategories and pages related to troops, specifically under the "Infantry" category. This categorization includes detailed entries on individual infantry types as well as broader troop-related content such as training camps and warp gates.
+
+The wiki also mentions that some pages were adapted from a previous version of the Galaxy Life Fandom wiki, suggesting ongoing development and maintenance of the game's documentation. The information is under a Creative Commons Attribution-ShareAlike 4.0 License, indicating open access for use and modification by others.

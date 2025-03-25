@@ -1,120 +1,19 @@
+The game Galaxy Life features various Non-Player Characters (NPCs) that serve different roles within the player's journey, from providing quests to being antagonists in the storyline. The NPCs are categorized under different sections such as protagonists, antagonists, and others.
 
+**Elderby:** Elderby is a wise Starling who acts as an initial mentor to new players. He offers several missions, with 'Training Days' Part 1 being one of them. His significance diminishes as the player progresses, appearing more like a novice when compared to higher-level players.
 
+**Sparragon and Firebit:** Both are antagonists in the game. Sparragon is initially an easy target but becomes challenging as the player advances, providing significant resources upon defeat. Firebit introduces the main story through kidnapping Starlings after initial attacks and later introduces S-Trikes for a more complex mission.
 
+**Reptice:** An antagonist living on a frozen planet behind a black hole, Reptice requires destroying his star base to unlock the Freeze Turret blueprints. He is described as a wizard with unknown origins.
 
+**The Dark One:** The main antagonist of the Doomsday event, The Dark One represents a significant challenge and threat in the game’s storyline.
 
-Help
+**Major Wor and Chubi:** Major Wor acts as a war general who assigns missions to players, while Chubi serves as the head scientist, introducing new features and discoveries. Both are essential for player progression.
 
-Category:NPC
+**Luck Norris:** As the bug fixer, Luck Norris enforces anti-cheating measures and ensures fair gameplay by penalizing cheaters.
 
-From Galaxy Life Wiki
+**Spyling:** A recent addition to the game, Spyling is responsible for espionage missions against enemy bases, rewarding players with capsules upon successful spying.
 
+**Workers:** These are crucial for player colonies. Starting with one worker, players can hire more through specific items or friends, aiding in building and maintaining their colonies.
 
-
-Jump to navigation
-Jump to search
- All NPCContents
-
-1 Elderby
-2 Sparragon
-3 Firebit
-4 Reptice
-5 The Dark One
-6 Magmalot
-7 Counselor Mobius
-8 Major Wor
-9 Chubi
-10 Oopsies
-11 Luck Norris
-12 Spyling
-13 Workers
-14 Trivia
-
-
-Elderby
-
-Elderby is an old and very wise Starling. He is always the first friend you have, however many your account has. When you begin the game, you look up to Elderby, the great player who is level 100. His Starbase is Level 6. He gives you a few missions, of which the last is 'Training Days' Part 1. However, as you grow better and better in the game, Elderby begins to look like a newbie- Especially when your hitting level 500+!...
-
-Sparragon
-
-Sparragon is one of the three antagonists in the game. He is a space pirate that attacks you once in the whole game. If you destroy his Star Base, his planet will repair instantly and he will build a stronger defense, his level is higher and, in most cases, his Star Base level-ups. At the first levels he is very easy but later he begins to get harder and harder beeing a real challenge. He gives the most ammount of resources of the three "enemies" that you can attack.
-
-Firebit
-
-Firebit is the best of the three antagonists in the game. He attacks you first with a group of Marines and, a few missions after, he says that he has rebuilt his planet and kidnaps your Starlings. That kidnapping is the beginning of the main story. You must destroy Sparragon's Star Base for the Delta Key, then train lots of troops and destroy Firebit's Star Base to rescue the Starlings. After that, you can attack him as many times as you want, but per attack, his planet will be stronger!
-When the S-Trike was introduced, a new Mission including Firebit was released. Firebit will attack you with a group of 4 S-Trikes. You then have to build a few Flamethrowers, 2 Kamikazes, and S-Trikes to destroy Firebit's Star Base.
-
-Reptice
-
-Reptice is an antagonist in the game. He lives on the other side of a black hole, on a frozen planet. You need to destroy his Star Base to construct the Freeze Turret. All his loot is minerals. You first need to get a Star Base level four first, to get through the black hole. Reptice is the only one living behind a black hole.
-Apparently he is a wizard according to the description: "We first need the blueprints to build the Freeze Turret! Rumor has it that Reptice, a hideous Starling wizard, knows the secret to slowing downtime. Find him in the Planetary System, destroy his HQ and seize the blueprints for the turret!"
-
-The Dark One
-
-The Dark One is the antagonist of the Doomsday (Easter) Event, he is the leader of the Golems and wishes nothing more than to utterly annihilate your base. In order to win in the events and gain rewards you must defeat his waves. 
-It is unknown how the Dark One came to be although some theorize that the Dark One is responsible for making Firebit's seed rotten and Sparragon's seed unripe, and maybe even the cause for Reptice's experiment going wrong.
-
-Magmalot
-
-Magmalot is the newest antagonist in the game. He lives on a planet in your solar system. You need to complete a questline to unlock him and his own unique questline.
-He is apparently the mutated brother of Firebit in a failed cloning experiment
-
-Counselor Mobius
- Mobius in-game pic. Counselor Mobius is the Alliance know-it-all. He is the go-to guy if you ever have a question about how Alliances work. He will help you get started and will be around to help you along the way if you ever get stuck.
-
-
-Major Wor
-Major Wor is a Starling war general. He will give you many missions throughout the game. He is also the mascot for all attacks you make on other players. He will also deliver you your battle stats. The first mission he gives you is the Save The Starlings! mission chain instead of defending against Firebit when you first start the game.
-Chubi
-
-Chubi is the head scientist Starling in the lab. He delivers all the new game features, after carefully developing each one. He gives you a lot of your missions. He helps you to discover the Laboratory for upgrading your units, and the Observatory for colonizing new systems, he is the first one who was introduced in the fan page (Facebook). He can also be seen from time to time on the loading screen.
-
-Oopsies
-
-Oopsies is the Starling bug fixer. He reads all the bug reports (for example when something goes wrong technically with your game) and gets together with the other Worker Starlings to get them fixed. Though he may not be the most coordinated Starling, he sure does love his bugs!
-
-Luck Norris
-
-Luck Norris is always listening, He is always in the know, and he is always watching. Thanks to him, hackers are now nothing but a bad dream in the past, whereby if Luck Norris catches you cheating then you'll feel his wrath! Check his personal page to know how to report a cheater!
-
-Spyling
- 
-Spyling is one of the latest NPC's of Galaxy Life. He's the Spying Capsule pilot and is in charge of spying enemy bases. He gives you two capsules every day you spy, up to fifteen (15).
-
-Workers
- 
-Workers are a crucial part of any colony. They are the people who build everything you need. When the player first starts the game they start with 1 Worker. In order to hire another one, you will need a helmet, a tool case, and a mallet or a friendship stone.
-
-Trivia
-Fixed bug that showed the wrong information of the NPC's after attacking them. The information shown now is correct.
-
-
-
-
-Subcategories
-This category has the following 2 subcategories, out of 2 total.
-A
- Antagonists‎ (6 P)P
- Protagonists‎ (8 P)
-
-Pages in category "NPC"
-The following 18 pages are in this category, out of 18 total.
-B
-BankerC
-Chubi
-Counselor MobiusE
-ElderbyF
-FirebitG
-GandalinL
-Luck NorrisM
-Magmalot
-Major WorO
-OopsiesP
-PinkiaR
-Reptice
-RexiurS
-Sparragon
-StarlingsT
-The Dark OneU
-Unused ContentW
-Worker
+The game also includes a category of "Protagonists," though detailed descriptions were not provided in the context. The summary outlines the roles and functionalities of various NPCs across different categories, highlighting how they contribute to player interaction, story progression, and gameplay mechanics.

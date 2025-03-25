@@ -1,0 +1,17 @@
+The game Galaxy Life features several military buildings that play crucial roles in unit training, storage, and deployment. There are four primary Military Buildings within the game:
+
+1. **Training Camp**: This building is essential for training infantry units such as Marines, Bazookas, Flamethrowers, Looters, Starlinators, and Kamikaze.
+
+2. **Starport**: Responsible for producing aircraft like Wasps, Hoover UFOs, Falcons, and Zeppelin.
+
+3. **Factory**: Used to manufacture armored vehicles including S-Trikes, Beetle Tanks, Raiders, Moles, and Colossus.
+
+4. **Warp Gate**: Acts as a storage point for units trained in the other buildings. When an attack is initiated, units around the Warp Gate can teleport directly into battle at the cost of minerals.
+
+The game also includes several updates and bug fixes:
+- The color coding of enemy units has been adjusted to Sparragon (Green), Friends (Yellow), and Firebit (Purple).
+- A bug related to building upgrades during unit production has been fixed.
+- Newsfeeds now include tutorial videos for better guidance.
+- Issues with wall-crossing by units have been resolved.
+
+These military buildings are critical in managing the player's army, ensuring efficient training, storage, and deployment of both infantry and aircraft.

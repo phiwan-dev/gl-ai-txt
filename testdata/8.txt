@@ -1,0 +1,21 @@
+The category "Aircrafts" on the Galaxy Life Wiki contains a collection of aircraft units within the game, which are noted for their high cost and long production time compared to other troop types. These aircraft offer several advantages:
+
+1. **Immunity from Certain Turrets**: Not all turrets can target or attack these aircraft, providing them with significant protection against ground-based defensive structures.
+2. **Weaknesses**: Despite their immunity to certain attacks, they are vulnerable to missile launchers and bazookas deployed within enemy Defense Bunkers.
+
+In terms of upgrades, the category mentions that there are no level 7 upgrades available for these aircraft, indicating a limit on their overall customization or improvement potential in the game.
+
+The Aircrafts category includes several specific units:
+
+- **Demon E**: A unit likely named Demon and possibly an evil emissary.
+- **Emissary Of Evil**: Another unit with an evil connotation.
+- **Falcon**: An aerial unit known for its speed and agility.
+- **Hoover UFO**: Likely a flying object or aircraft that may have unique abilities, possibly related to defense or resource collection.
+- **Mender S**: A repair-oriented unit that could be used for maintaining other units in the air.
+- **Shriek**: Possibly a unit named after an intense sound or high-pitched noise it might emit during battle.
+- **Starport W**: This name suggests a facility or point of origin for aircraft production, possibly a starport.
+- **Warp Gate**: A gateway that could enable faster movement across the game map.
+- **Wasp**: A likely fast and agile unit similar to its insect namesake.
+- **Zeppelin**: An airship or large flying craft with significant capacity.
+
+These units are categorized under "Troops," which suggests they play a combat role in the game. The category also contains subcategories for other troop types, indicating a well-organized system of different military assets within Galaxy Life.

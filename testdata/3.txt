@@ -1,0 +1,41 @@
+The game Galaxy Life involves various buildings categorized as Resource Buildings, which play a crucial role in managing resources. These buildings are essential for producing and storing coins, minerals, and experience points (XP) gathered from different sources within the game.
+
+### Overview of Resource Buildings
+
+Resource Buildings include:
+- **Compact Houses**
+- **Mines**
+- **Banks**
+- **Silos**
+
+These structures serve multiple purposes: they produce resources from player-owned planets, enhance resource production on friends' planets through assistance, and enable players to loot resources from enemies' planets.
+
+### Gathering Resources
+
+#### On Your Own Planet
+Players can collect coins, minerals, and XP by:
+- Visiting compact houses on their own planet.
+- Mining for resources in mines located on their own planet.
+
+#### On Friends' Planets
+By clicking on friends' compact houses or mines, players can help increase the production output of these structures, benefiting both the friend and the player.
+
+#### On Enemies' Planets
+Players can attack and destroy enemy compact houses and mines to loot valuable resources for themselves. This method is particularly useful when dealing with enemies who are stronger in combat but weaker in resource management.
+
+### Related Categories and Pages
+
+The game also categorizes buildings into other sections such as:
+- **Main Buildings**
+- **Military**
+- **Defensive**
+
+Additionally, there are related pages covering various aspects of the game like resources, items, and miscellaneous events. These categories help players navigate different functionalities and content within the game.
+
+### Subcategories
+The main category "Resource Buildings" has several subcategories, including:
+- **Resources**, which further breaks down into multiple pages (though specific details about these are not provided).
+
+### Conclusion
+
+In summary, Galaxy Life features a robust resource management system through its Resource Buildings. Players can enhance their resources by managing buildings on their own and friend planets and by looting enemy planets. The game encourages players to explore different strategic methods for acquiring valuable resources, ensuring dynamic gameplay and engagement.

@@ -1,0 +1,11 @@
+The category "Main Buildings" within the Galaxy Life Wiki pertains to key structures essential for player progression in the game. This category includes three primary buildings: the Starbase, Laboratory, and Observatory.
+
+1. **Starbase**: This building is crucial as it unlocks new constructions, units, and allows for their upgrades. It plays a central role in enhancing both military and resource management capabilities.
+   
+2. **Laboratory**: Essential for unit development, this structure trains your troops to higher levels, making them more powerful and effective on the battlefield or during missions.
+
+3. **Observatory**: Responsible for expanding your reach, the Observatory enables the colonization of new planets and the deployment of new bases, contributing significantly to territorial growth and resource acquisition.
+
+The category also includes a list of pages that are part of this main building structure, with specific entries for "Academy" and "Embassy," although these do not appear in the main description but might be related to additional subcategories or expansions within Galaxy Life. 
+
+Overall, these buildings form the backbone of strategic gameplay, offering players tools necessary to develop their empires, train stronger units, and expand into new territories.

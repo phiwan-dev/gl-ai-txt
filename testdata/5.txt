@@ -1,0 +1,19 @@
+The category "Defensive Buildings" on the Galaxy Life Wiki contains pages dedicated to various defensive structures that players can use to protect their planets from attacks. These buildings are categorized into primary and secondary defenses.
+
+**Primary Defenses:**
+1. **Sniper Tower**: Typically used for long-range precision attacks.
+2. **Mortars**: Effective against large groups of enemies due to their area-of-effect capabilities.
+3. **Laser Towers**: Provide continuous laser-based defense, suitable for sustained combat.
+4. **Missile Launchers**: Deploy missiles that can hit distant targets and deal significant damage.
+5. **Cannon Blast**: A direct-target weapon with a powerful attack radius.
+6. **Freeze Turrets**: Freezes enemies in place, allowing allies to attack immobilized targets.
+
+**Secondary Defenses:**
+1. **Friends Bunker**: Offers temporary protection for friendly units during attacks.
+2. **Defensive Bunkers**: Structures that can be used to fortify and protect key areas of the planet.
+3. **Walls**: Basic defensive structures that provide a physical barrier against invasions.
+4. **Traps**: Passive defenses that can be set up to hinder enemy movements and reduce their effectiveness.
+
+These defensive buildings play a crucial role in safeguarding players' planets from various threats. The wiki also includes pages related to the collection items and subcategories such as Bunkers and Turrets, which further detail specific types of defensive structures available for use.
+
+Additionally, the category includes links to other relevant pages like "Defense Tips," providing strategic advice on how to effectively utilize these defenses in gameplay.
