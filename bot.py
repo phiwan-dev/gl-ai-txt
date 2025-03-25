@@ -5,10 +5,11 @@ date: 2025-03-24
 version: 0.2
 license: MIT
 description: Galaxy Life chatbot which uses information from the wiki to answer as a RAG LLM
-requirements: langchain_core, langchain-community, langchain-ollama, langchain-text-splitters, langgraph
+requirements: langchain_core, langchain-community, langchain-ollama, langchain-text-splitters, langgraph, faiss-cpu
 """
 
 import os
+from pydantic import BaseModel
 from typing import Any, Generator, List
 from typing_extensions import List, TypedDict
 from langchain_core.documents import Document
@@ -25,9 +26,24 @@ from langgraph.graph.state import CompiledStateGraph
 
 class Pipeline:
 
+    class Valves(BaseModel):
+        model_name: str
+        embeddings_model_name: str
+        data_dir: str
+
     def __init__(self) -> None:
         self.name = "Galaxy Life Wiki Bot"
-        self.bot = GlBot()
+        
+        self.valves = self.Valves(**{
+            "model_name": "qwen2.5:7b",
+            "embeddings_model_name": "nomic-embed-text:latest",
+            "data_dir": "~/work/gl-ai-txt/testdata"
+        })
+        
+        self.bot = GlBot(model_name=self.valves.model_name, embeddings_model_name=self.valves.embeddings_model_name, data_dir=self.valves.data_dir)
+
+    async def on_valves_updated(self):
+        self.bot = GlBot(model_name=self.valves.model_name, embeddings_model_name=self.valves.embeddings_model_name, data_dir=self.valves.data_dir)
 
     async def on_startup(self) -> None:
         # This function is called when the server is started.
@@ -49,11 +65,14 @@ class GlBot():
         answer: str
 
 
-    def __init__(self) -> None:
-        #self.MODEL_NAME = "gemma3:12b"
-        #self.MODEL_NAME = "phi4"
-        self.MODEL_NAME = "qwen2.5:7b"
-        self.EMBEDDINGS_MODEL_NAME = "nomic-embed-text:latest"
+    def __init__( self, 
+                  model_name: str = "qwen2.5:7b", 
+                  embeddings_model_name: str = "nomic-embed-text:latest", 
+                  data_dir: str = "~/work/gl-ai-txt/testdata"
+                ) -> None:
+        self.MODEL_NAME = model_name
+        self.EMBEDDINGS_MODEL_NAME = embeddings_model_name
+        self.data_dir = data_dir
 
         self.vector_store = self.embed_documents()
         self.llm = ChatOllama(model=self.MODEL_NAME)
@@ -83,7 +102,7 @@ class GlBot():
 
     def embed_documents(self) -> FAISS:
         # get raw docs
-        doc_loader = DirectoryLoader(os.path.expanduser("~/work/gl-ai-txt/testdata"), glob="**/*.txt", show_progress=True, use_multithreading=False, loader_cls=TextLoader)  
+        doc_loader = DirectoryLoader(os.path.expanduser(self.data_dir), glob="**/*.txt", show_progress=True, use_multithreading=False, loader_cls=TextLoader)  
         raw_documents = doc_loader.load()
 
         # create embeddings
