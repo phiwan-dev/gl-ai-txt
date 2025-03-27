@@ -1,3 +1,4 @@
+from typing import List
 import requests
 from requests import Response
 from bs4 import BeautifulSoup
@@ -6,6 +7,11 @@ import argparse
 from argparse import Namespace
 from langchain_ollama import ChatOllama
 from langchain_core.prompts import PromptTemplate
+from langchain_community.document_loaders import DirectoryLoader, TextLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_community.vectorstores import FAISS
+from langchain_ollama import ChatOllama, OllamaEmbeddings
+from langchain_core.documents import Document
 
 
 def parse_args() -> Namespace:
@@ -15,6 +21,7 @@ def parse_args() -> Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--download", help="download the wiki pages", action="store_true")
     parser.add_argument("-p", "--preprocess", help="run the preprocessing step", action="store_true")
+    parser.add_argument("-e", "--embed", help="embed the data and create a vector store", action="store_true")
     return parser.parse_args()
 
 
@@ -121,6 +128,27 @@ def preprocess_data(raw_data: str = "data/raw/", processed_data: str = "data/pro
     print("\nFinished preprocessing data")
 
 
+def embed(data_dir: str = "data/processed/") -> None:
+    # get raw docs
+    doc_loader = DirectoryLoader(os.path.expanduser(data_dir), glob="**/*.txt", show_progress=True, use_multithreading=False, loader_cls=TextLoader)  
+    raw_documents = doc_loader.load()
+
+    # create embeddings
+    embeddings: OllamaEmbeddings = OllamaEmbeddings(model="nomic-embed-text:latest")
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=4000,chunk_overlap=500,length_function=len)
+    documents: List[Document] = text_splitter.split_documents(raw_documents)
+
+    # build vs load vectorstore. True=build, False=load
+    vector_store = FAISS.from_documents(documents[:1], embeddings)
+    print(f"\t[PROCESS DOCS] ({len(documents)})")
+    for doc in documents:
+        _ = vector_store.add_documents([doc])
+        print("#", end="", flush=True)
+    print("")
+    vector_store.save_local("vectorstore/")
+
+
+
 if __name__ == "__main__":
     args: Namespace = parse_args()
 
@@ -140,6 +168,14 @@ if __name__ == "__main__":
             print(f"Found {len(os.listdir('data/processed'))} processed data files. Skipping preprocessing of raw data.")
         else:
             print("No processed data found! Consider setting the '--preprocess' flag!")
+
+    if args.embed:
+        embed()
+    else:
+        if os.path.exists("vectorstore/") and len(os.listdir("vectorstore/")) > 0:
+            print(f"Found vectorstore files. Skipping embedding of data and vector store creation.")
+        else:
+            print("No vector store found! Consider setting the '--embed' flag!")
 
 
     

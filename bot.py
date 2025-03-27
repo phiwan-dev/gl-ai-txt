@@ -74,7 +74,7 @@ class GlBot():
         self.EMBEDDINGS_MODEL_NAME = embeddings_model_name
         self.data_dir = data_dir
 
-        self.vector_store = self.embed_documents()
+        self.vector_store = self.load_vector_store()
         self.llm = ChatOllama(model=self.MODEL_NAME)
         
         raw_rephrase_prompt: str = """Last Response: {last_response}
@@ -100,27 +100,10 @@ class GlBot():
         self.config: RunnableConfig = {"configurable": {"thread_id": "1"}}
 
 
-    def embed_documents(self) -> FAISS:
-        # get raw docs
-        doc_loader = DirectoryLoader(os.path.expanduser(self.data_dir), glob="**/*.txt", show_progress=True, use_multithreading=False, loader_cls=TextLoader)  
-        raw_documents = doc_loader.load()
-
-        # create embeddings
-        embeddings: OllamaEmbeddings = OllamaEmbeddings(model=self.EMBEDDINGS_MODEL_NAME)
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=4000,chunk_overlap=500,length_function=len)
-        documents: List[Document] = text_splitter.split_documents(raw_documents)
-
-        # build vs load vectorstore. True=build, False=load
-        if True:
-            vector_store = FAISS.from_documents(documents[:1], embeddings)
-            print(f"\t[PROCESS DOCS] ({len(documents)})")
-            for doc in documents:
-                _ = vector_store.add_documents([doc])
-                print("#", end="", flush=True)
-            print("")
-            vector_store.save_local("cache/faiss")
-        else:
-            vector_store = FAISS.load_local("cache/faiss", embeddings, allow_dangerous_deserialization=True)
+    def load_vector_store(self) -> FAISS:
+        # make sure to use the same embeddings model as in the data preparation!
+        embeddings: OllamaEmbeddings = OllamaEmbeddings(model=self.EMBEDDINGS_MODEL_NAME)       
+        vector_store = FAISS.load_local("cache/faiss", embeddings, allow_dangerous_deserialization=True)
         return vector_store
 
 

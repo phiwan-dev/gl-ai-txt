@@ -1,4 +1,5 @@
 data
 cache
+vectorstore
 __pycache__
 .direnv
