@@ -20,8 +20,13 @@ def parse_args() -> Namespace:
     '''
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--download", help="download the wiki pages", action="store_true")
-    parser.add_argument("-p", "--preprocess", help="run the preprocessing step", action="store_true")
+    parser.add_argument("--download_dir", type=str, help="path to the directory to save the downloaded data to", default="data/raw/")
+    parser.add_argument("-p", "--process", help="run the processing step", action="store_true")
+    parser.add_argument("--processed_dir", type=str, help="path to the directory to save the processed data to", default="data/processed/")
+    parser.add_argument("--process_model", type=str, help="the ollama model to use for summarization during processing", default="qwen2.5:7b")
     parser.add_argument("-e", "--embed", help="embed the data and create a vector store", action="store_true")
+    parser.add_argument("--vectorstore_dir", type=str, help="path to the directory to save the vector store to", default="vectorstore/")
+    parser.add_argument("--embed_model", type=str, help="the ollama model to use for embedding the processed data into a vectorstore", default="nomic-embed-text:latest")
     return parser.parse_args()
 
 
@@ -66,7 +71,7 @@ def get_links_from_wiki(wiki_base_url: str = "https://galaxylife.wiki.gg", all_p
     return filtered_wiki_links
 
 
-def download_urls(urls: list[str], folder: str = "data/raw/") -> None:
+def download_urls(urls: list[str], folder: str) -> None:
     '''
     Downloads the HTML content of all pages from a given list of URLs.
 
@@ -80,16 +85,16 @@ def download_urls(urls: list[str], folder: str = "data/raw/") -> None:
     for ii, url in enumerate(urls):
         #print(f"{url=}")
         response: Response = requests.get(url)
-        with open(folder + str(ii) + ".html", "w", encoding="utf-8") as file:
+        with open(os.path.join(folder, str(ii) + ".html"), "w", encoding="utf-8") as file:
             file.write(response.text)
         #print(f"finished {ii+1}/{len(urls)}")
         print("#", flush=True, end="")
     print("\nFinished downloading HTML content")
     
 
-def preprocess_data(raw_data: str = "data/raw/", processed_data: str = "data/processed/", model_name: str="qwen2.5:7b") -> None:
+def process_data(model_name: str, raw_data: str, processed_data: str) -> None:
     '''
-    Preprocesses the raw HTML data into better human readable text files.
+    Processes the raw HTML data into better human readable text files.
     Note that this will not make them perfect.
 
     :param raw_data: Folder containing the raw HTML data
@@ -111,7 +116,7 @@ def preprocess_data(raw_data: str = "data/raw/", processed_data: str = "data/pro
     summarization_prompt = PromptTemplate.from_template(raw_summarization_prompt)
 
 
-    print("Preprocessing data...")
+    print("Processing data...")
     for file in os.listdir(raw_data):
         ii: int = int(file.split(".")[0])
         with open(raw_data + file, "r", encoding="utf-8") as f:
@@ -122,30 +127,37 @@ def preprocess_data(raw_data: str = "data/raw/", processed_data: str = "data/pro
             message = summarization_prompt.invoke({"context": content})
             response = llm.invoke(message)
             
-            with open(processed_data + str(ii) + ".txt", "w", encoding="utf-8") as text_file:
+            with open(os.path.join(processed_data, str(ii) + ".txt"), "w", encoding="utf-8") as text_file:
                 text_file.write(str(response.content))
         print("#", flush=True, end="")
-    print("\nFinished preprocessing data")
+    print("\nFinished processing data")
 
 
-def embed(data_dir: str = "data/processed/") -> None:
+def embed(model_name: str, data_dir: str, vectorstore_dir: str) -> None:
+    '''
+    Embeds the processed data and creates a vector store such that it 
+    doesnt need to be re-embedded during runtime. Changes to the data
+    will require re-embedding.
+    
+    :param data_dir: Folder containing the processed data
+    '''
     # get raw docs
     doc_loader = DirectoryLoader(os.path.expanduser(data_dir), glob="**/*.txt", show_progress=True, use_multithreading=False, loader_cls=TextLoader)  
     raw_documents = doc_loader.load()
 
     # create embeddings
-    embeddings: OllamaEmbeddings = OllamaEmbeddings(model="nomic-embed-text:latest")
+    embeddings: OllamaEmbeddings = OllamaEmbeddings(model=model_name)
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=4000,chunk_overlap=500,length_function=len)
     documents: List[Document] = text_splitter.split_documents(raw_documents)
 
-    # build vs load vectorstore. True=build, False=load
+    # build vectorstore
     vector_store = FAISS.from_documents(documents[:1], embeddings)
     print(f"\t[PROCESS DOCS] ({len(documents)})")
     for doc in documents:
         _ = vector_store.add_documents([doc])
         print("#", end="", flush=True)
     print("")
-    vector_store.save_local("vectorstore/")
+    vector_store.save_local(vectorstore_dir)
 
 
 
@@ -154,25 +166,25 @@ if __name__ == "__main__":
 
     if args.download:
         links: list[str] = get_links_from_wiki()
-        download_urls(links)
+        download_urls(urls=links, folder=args.download_dir)
     else:
-        if os.path.exists("data/raw/") and len(os.listdir("data/raw/")) > 0:
-            print(f"Found {len(os.listdir('data/raw'))} raw data files. Skipping download of wiki data.")
+        if os.path.exists(args.download_dir) and len(os.listdir(args.download_dir)) > 0:
+            print(f"Found {len(os.listdir(args.download_dir))} raw data files. Skipping download of wiki data.")
         else:
             print("No wiki data found! Consider setting the '--download' flag!")
 
-    if args.preprocess:
-        preprocess_data()
+    if args.process:
+        process_data(model_name=args.process_model, raw_data=args.download_dir, processed_data=args.processed_dir)
     else:
-        if os.path.exists("data/processed/") and len(os.listdir("data/processed/")) > 0:
-            print(f"Found {len(os.listdir('data/processed'))} processed data files. Skipping preprocessing of raw data.")
+        if os.path.exists(args.processed_dir) and len(os.listdir(args.processed_dir)) > 0:
+            print(f"Found {len(os.listdir(args.processed_dir))} processed data files. Skipping processing of raw data.")
         else:
-            print("No processed data found! Consider setting the '--preprocess' flag!")
+            print("No processed data found! Consider setting the '--process' flag!")
 
     if args.embed:
-        embed()
+        embed(model_name=args.embed_model, data_dir=args.processed_dir, vectorstore_dir=args.vectorstore_dir)
     else:
-        if os.path.exists("vectorstore/") and len(os.listdir("vectorstore/")) > 0:
+        if os.path.exists(args.vectorstore_dir) and len(os.listdir(args.vectorstore_dir)) > 0:
             print(f"Found vectorstore files. Skipping embedding of data and vector store creation.")
         else:
             print("No vector store found! Consider setting the '--embed' flag!")
