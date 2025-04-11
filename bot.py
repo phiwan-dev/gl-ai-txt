@@ -2,7 +2,7 @@
 title: Galaxy Life Wiki Bot
 author: phiwan-dev
 date: 2025-03-24
-version: 0.2
+version: 0.3
 license: MIT
 description: Galaxy Life chatbot which uses information from the wiki to answer as a RAG LLM
 requirements: langchain_core, langchain-community, langchain-ollama, langchain-text-splitters, langgraph, faiss-cpu
@@ -51,6 +51,12 @@ class Pipeline:
         pass
 
     def pipe(self, user_message: str, *args: Any, **kwargs: Any) -> Generator[str, None, None]:
+        
+        print("PIPE EXECUTED")          # the pipeline is executed multiple times per user input
+                                        # for things like title generation etc.
+        if user_message[:3] == "###":   # implement a hacky workaround to only spend computation
+            return                      # cost when user input (not starting with ###) is read.
+        
         for message, metadata in self.bot.graph.stream(input={"question": user_message}, config=self.bot.config, stream_mode="messages"):
             if metadata["langgraph_node"] == "generate_response":   # only print output from the final node
                     yield message.content
@@ -143,8 +149,9 @@ class GlBot():
         })
         #print("CONTEXT:")
         #print(docs_content)
-        print("ANSWER:")
+        print("ANSWER...")
         response = self.llm.invoke(prompt)
+        print(">answer in open-webui...")
         return {"answer": response.content}
 
 
