@@ -29,7 +29,6 @@ class Pipeline:
     class Valves(BaseModel):
         model_name: str
         embeddings_model_name: str
-        data_dir: str
 
     def __init__(self) -> None:
         self.name = "Galaxy Life Wiki Bot"
@@ -37,13 +36,12 @@ class Pipeline:
         self.valves = self.Valves(**{
             "model_name": "qwen2.5:7b",
             "embeddings_model_name": "nomic-embed-text:latest",
-            "data_dir": "~/work/gl-ai-txt/testdata"
         })
         
-        self.bot = GlBot(model_name=self.valves.model_name, embeddings_model_name=self.valves.embeddings_model_name, data_dir=self.valves.data_dir)
+        self.bot = GlBot(model_name=self.valves.model_name, embeddings_model_name=self.valves.embeddings_model_name)
 
     async def on_valves_updated(self):
-        self.bot = GlBot(model_name=self.valves.model_name, embeddings_model_name=self.valves.embeddings_model_name, data_dir=self.valves.data_dir)
+        self.bot = GlBot(model_name=self.valves.model_name, embeddings_model_name=self.valves.embeddings_model_name)
 
     async def on_startup(self) -> None:
         # This function is called when the server is started.
@@ -73,12 +71,10 @@ class GlBot():
 
     def __init__( self, 
                   model_name: str = "qwen2.5:7b", 
-                  embeddings_model_name: str = "nomic-embed-text:latest", 
-                  data_dir: str = "~/work/gl-ai-txt/testdata"
+                  embeddings_model_name: str = "nomic-embed-text:latest",
                 ) -> None:
         self.MODEL_NAME = model_name
         self.EMBEDDINGS_MODEL_NAME = embeddings_model_name
-        self.data_dir = data_dir
 
         self.vector_store = self.load_vector_store()
         self.llm = ChatOllama(model=self.MODEL_NAME)

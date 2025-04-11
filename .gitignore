@@ -3,3 +3,4 @@ cache
 vectorstore
 __pycache__
 .direnv
+.webui_secret_key
