@@ -147,7 +147,7 @@ class GlBot():
         #print(docs_content)
         print("ANSWER...")
         response = self.llm.invoke(prompt)
-        print(">answer in open-webui...")
+        print("\nANSWER END")
         return {"answer": response.content}
 
 

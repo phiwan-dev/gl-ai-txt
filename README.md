@@ -1,16 +1,16 @@
 # Introduction
-This repository contains my source files for building a customized LLM RAG chatbot for the online game [Galaxy Life](https://galaxylifegame.net/) (2011-12-08). It operates on the information found on the [GalaxyLife Wiki](https://galaxylife.wiki.gg/). The project makes use of technology like Ollama, Langchain/Langgraph with the FAISS vectorstore and Open-Webui as an optional frontend.
+This repository contains my source files for building a customized LLM RAG chatbot for the online game [Galaxy Life](https://galaxylifegame.net/) (2011-12-08). It operates on the information found on the [GalaxyLife Wiki](https://galaxylife.wiki.gg/). The project makes use of technology like [Ollama](https://github.com/ollama/ollama), [Langchain/Langgraph](https://github.com/langchain-ai/langchain) with the [FAISS](https://github.com/facebookresearch/faiss) vectorstore and [Open-Webui](https://github.com/open-webui/open-webui) as an optional frontend.
 
 
 # Quickstart
-There are 2 ways to run this model: through a basic cli interface or a open-webui pipeline for a pretty browser frontend. I assume a GNU/Linux system (NixOS) with an Nvidia GPU with at least 6 GB of VRAM.
+There are 2 ways to run this model: through a basic cli interface or a open-webui pipeline for a pretty browser frontend. I assume a GNU/Linux system (NixOS) with an Nvidia GPU with at least 6 GB of VRAM to be given.
 
 ### Dependencies
 The repo contains a nix flake to get you strated using the nix package manager. You can set up the environment through `nix develop`. If nix-direnv is configured on the system, you can run `direnv allow` to automatically load and unload the nix environment when entering and leaving the project directory.
 > [!NOTE]
 > Other methods for setting up python environments are not supported at the moment and need to be prepared manually. Have a look at the [flake.nix](flake.nix) file for dependency hints.  
 
-The flake environment provides ollama v0.6.0 which is able to run models like qwen2.5 or gemma3. Let's install `qwen2.5:7b`, which is the default model used at the core of the bot and the `nomic-embed-text:latest` for dealing with embedded text documents from the wiki later on. For this, you can use
+The flake environment provides ollama v0.6.0 which is able to run models like qwen2.5 or gemma3. Let's download `qwen2.5:7b`, which is the default model used at the core of the bot and the `nomic-embed-text:latest` for dealing with embedded text documents from the wiki later on. For this, you can use
 ```
 ollama pull qwen2.5:7b
 ollama pull nomic-embed-text:latest
@@ -42,8 +42,9 @@ conda activate open-webui
 open-webui serve
 ```
 Open-WebUI should now be running at `http://localhost:8080`.  
-Now let's install pipelines for which we again need conda, which I assume to be available by now. Note that pipelines offers arbitrary code execution! If you don't feel comfortable with this you should stop here. Never run pipelines from people you don't trust!
+Now let's install pipelines for which we again need conda, which I assume to be available by now.
 > [!NOTE]
+> Note that pipelines offers arbitrary code execution! If you don't feel comfortable with this you should stop here. Never run pipelines from people you don't trust!
 > Pipelines also offers the possibility to be installed in a Docker container to minimize risk.
 ```
 conda create --name pipelines python==3.12
