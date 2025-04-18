@@ -4,4 +4,11 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "faiss-cpu>=1.10.0",
+    "langchain-community>=0.3.21",
+    "langchain-core>=0.3.54",
+    "langchain-ollama>=0.3.2",
+    "langgraph>=0.3.31",
+    "pydantic>=2.11.3",
+]
