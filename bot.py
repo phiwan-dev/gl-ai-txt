@@ -5,7 +5,7 @@ date: 2025-03-24
 version: 0.3
 license: MIT
 description: Galaxy Life chatbot which uses information from the wiki to answer as a RAG LLM
-requirements: langchain_core, langchain-community, langchain-ollama, langchain-text-splitters, langgraph, faiss-cpu
+#requirements: langchain_core, langchain-community, langchain-ollama, langchain-text-splitters, langgraph, faiss-cpu
 """
 
 import os
