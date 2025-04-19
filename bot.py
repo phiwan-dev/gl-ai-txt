@@ -104,8 +104,13 @@ class GlBot():
 
     def load_vector_store(self) -> FAISS:
         # make sure to use the same embeddings model as in the data preparation!
-        embeddings: OllamaEmbeddings = OllamaEmbeddings(model=self.EMBEDDINGS_MODEL_NAME)       
-        vector_store = FAISS.load_local("cache/faiss", embeddings, allow_dangerous_deserialization=True)
+        embeddings: OllamaEmbeddings = OllamaEmbeddings(model=self.EMBEDDINGS_MODEL_NAME)
+        if os.path.exists("cache/faiss"):       # from cli
+            vector_store = FAISS.load_local("cache/faiss", embeddings, allow_dangerous_deserialization=True)
+        elif os.path.exists("../cache/faiss"):  # from open-webui pipelines
+            vector_store = FAISS.load_local("../cache/faiss", embeddings, allow_dangerous_deserialization=True)
+        else:
+            print("No vector store found. Please run the data preparation script first.")
         return vector_store
 
 

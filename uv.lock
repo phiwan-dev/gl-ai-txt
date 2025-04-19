@@ -847,7 +847,6 @@ dependencies = [
     { name = "chromadb" },
     { name = "ddtrace" },
     { name = "faiss-cpu" },
-    { name = "fastapi" },
     { name = "google-generativeai" },
     { name = "grpcio" },
     { name = "httpx" },
@@ -887,7 +886,6 @@ dependencies = [
     { name = "tokenizers" },
     { name = "torch" },
     { name = "transformers" },
-    { name = "uvicorn", extra = ["standard"] },
     { name = "vertexai" },
     { name = "xgboost" },
 ]
@@ -901,7 +899,6 @@ requires-dist = [
     { name = "chromadb", specifier = ">=0.6.3" },
     { name = "ddtrace", specifier = ">=3.5.1" },
     { name = "faiss-cpu", specifier = ">=1.10.0" },
-    { name = "fastapi", specifier = "==0.111.0" },
     { name = "google-generativeai", specifier = ">=0.8.5" },
     { name = "grpcio", specifier = ">=1.71.0" },
     { name = "httpx", specifier = ">=0.28.1" },
@@ -941,7 +938,6 @@ requires-dist = [
     { name = "tokenizers", specifier = ">=0.21.1" },
     { name = "torch", specifier = ">=2.6.0" },
     { name = "transformers", specifier = ">=4.51.3" },
-    { name = "uvicorn", extras = ["standard"], specifier = "==0.22.0" },
     { name = "vertexai", specifier = ">=1.71.1" },
     { name = "xgboost", specifier = ">=3.0.0" },
 ]
