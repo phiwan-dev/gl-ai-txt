@@ -1,3 +1,18 @@
+# todo in readme:
+- clone recursively
+- for the future: setting up the uv environment can be a pain.
+- first add pipelines dependencies
+- then add bot dependencies as seen in the out commented line in bot.py
+- pydantic is a heavily fought for dependencies. on conflict remove it and add it at the end to let uv figure it out.
+- uv is nice but we have to provide the bot dependencies ourselves because pipelines can only resolve dependencies using pip
+- added bonus of manually taking care of versioning conflicts
+- uvx open-webui seve (tested with 0.6.5)
+- still work without uv, but requires uvx to be installed
+- 2 windows: 1 for owui, 1 for pipelines
+- use pipelines start script from within directory
+- other languages work only subpar. tested with german and it fails to form proper german sentences, though can be understandable at times. the content is definitely being picked up. your mileage may vary
+- example screenshot
+
 # Introduction
 This repository contains my source files for building a customized LLM RAG chatbot for the online game [Galaxy Life](https://galaxylifegame.net/) (2011-12-08). It operates on the information found on the [GalaxyLife Wiki](https://galaxylife.wiki.gg/). The project makes use of technology like [Ollama](https://github.com/ollama/ollama), [Langchain/Langgraph](https://github.com/langchain-ai/langchain) with the [FAISS](https://github.com/facebookresearch/faiss) vectorstore and [Open-Webui](https://github.com/open-webui/open-webui) as an optional frontend.
 
